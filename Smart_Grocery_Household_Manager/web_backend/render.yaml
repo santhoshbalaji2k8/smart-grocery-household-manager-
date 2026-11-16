@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: smart-grocery-household-manager-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt -r web_backend/requirements.txt
+    startCommand: python -m uvicorn web_backend.main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    disk:
+      name: grocery-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DATABASE_PATH
+        value: /var/data/smart_grocery.db
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: OWNER_SETUP_KEY
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
